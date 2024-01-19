@@ -1,15 +1,4 @@
-##---------------------------------------------------------
-##
-##course : "CS5200 Database Management System"
-##title : "Practicum II: Part 1 - Load XML Data into Database"
-##author : "Krina Devani (devani.k@northeastern.edu), Sarthak Kagliwal (kagliwal.s@northeastern.edu)"
-##term: "Spring 2023"
-##date : "20th April, 2023"
-##
-##Note : 
-## 1. we have taken 03 June, 2000 as a default date.
-## 2. we have taken first year, first month or first day if medlinedate is provided.
-##--------------------------------------------------------
+
 
 #Library
 library(XML)
