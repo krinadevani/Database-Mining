@@ -6,7 +6,7 @@ library(DBI)
 
 #Settings
 db_user <- 'root'
-db_password <- 'Sarthak@ubs5'
+db_password <- 'krina@123'
 db_name <- 'practicum2'
 db_host <- '127.0.0.1' 
 db_port <- 3306 
