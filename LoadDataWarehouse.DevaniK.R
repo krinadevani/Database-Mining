@@ -1,12 +1,4 @@
-##---------------------------------------------------------
-##
-##course : "CS5200 Database Management System"
-##title : "Practicum II: Part 2 - Create Star/Snowflake Schema"
-##author : "Krina Devani (devani.k@northeastern.edu), Sarthak Kagliwal (kagliwal.s@northeastern.edu)"
-##term: "Spring 2023"
-##date : "20th April, 2023"
-##
-##--------------------------------------------------------
+
 
 #Library 
 library(RMySQL)
