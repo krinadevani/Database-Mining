@@ -1,0 +1,95 @@
+---
+
+course : "CS5200 Database Management System"
+title : "Practicum II: Part 3 - Explore and Mine Data"
+author : "Krina Devani (devani.k@northeastern.edu), Sarthak Kagliwal (kagliwal.s@northeastern.edu)"
+term : "Spring 2023"
+date : "20th April, 2023"
+
+---
+
+#Connect to database
+```{r connectDb}
+library(ggplot2)
+
+db_user <- 'root'
+db_password <- 'Sarthak@ubs5'
+db_name <- 'practicum2'
+db_host <- '127.0.0.1' 
+db_port <- 3306 
+
+# 3. Connect to DB
+mySqlDb <-  dbConnect(MySQL(), user = db_user, password = db_password,
+                      dbname = db_name, host = db_host, port = db_port)
+```
+
+
+# Analytical Query I: Top five journals with the most articles published in them for the time period.
+
+```{r query1}
+get_articles_from_date <- function(fromYear,fromMonth,toYear,toMonth){
+  query <- paste0("SELECT f.JournalID,count(*) NoOfArticles FROM datedim as d 
+  LEFT JOIN fact_table as f
+  ON d.DateId = f.DateId
+  WHERE d.Year >= '",fromYear,"' AND d.Month >= '",fromMonth,"'
+  AND d.Year <= '",toYear,"' AND d.Month <= '",toMonth,"' 
+  GROUP BY f.JournalID
+  LIMIT 5;")
+  
+ result <- dbGetQuery(mySqlDb,query)
+ 
+ barplot(result$NoOfArticles,
+  main="Journals with the most articles",
+  xlab="JournalID",
+  ylab="Count",
+  border="red",
+  col="blue",
+  density=10,
+  names.arg = as.character(result$JournalID)
+)
+ 
+}
+```
+
+
+```{r resultQuery1}
+get_articles_from_date("1976","5","1977","5")
+```
+
+
+# Analytical Query II: Number of articles per journal per year broken down by quarter. 
+
+```{r query2, warning = F}
+
+query2 <- "SELECT f.JournalId, j.Title, d.YEAR, d.Quarter, SUM(NumArticles) AS NumArticles FROM fact_table AS f
+  LEFT JOIN datedim AS d ON d.DateId = f.DateId
+  LEFT JOIN journaldim AS j ON j.JournalId = f.JournalId
+  GROUP BY f.JournalId, j.Title, d.YEAR, d.Quarter
+  ORDER BY f.JournalId, d.YEAR, d.Quarter"
+
+result <- dbGetQuery(mySqlDb,query2)
+
+```
+
+
+```{r displayQuery2}
+
+print(result)
+
+```
+When dealing with a large dataset, visualizing the number of articles per journal per year broken down by quarter may not be feasible due to the following reasons:
+
+1. Overwhelming Complexity
+2. Limited Visual Space
+3. Processing Power and Performance
+4. Loss of Granularity
+
+In such cases, using tables can be a more appropriate approach as they provide a structured and organized way to present the data in tabular form, without the limitations of visual space or complexity. Tables allow for precise representation of the data with detailed information, and viewers can easily sort, filter, or search for specific journals or quarters as needed. Tables also do not require significant processing power or performance, making them more feasible for handling large datasets.
+
+# Disconnect database
+```{r}
+all_cons <- dbListConnections(MySQL())
+for(con in all_cons) 
+  dbDisconnect(con)
+```
+
